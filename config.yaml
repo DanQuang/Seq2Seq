@@ -1,0 +1,16 @@
+data_path: bentrevett/multi30k
+
+text_embedding:
+  embedding_dim: 50 
+  max_length: 128
+
+model:
+  hidden_units: 512
+  num_layers: 2
+
+dropout: 0.2
+patience: 5
+learning_rate: 0.001
+num_epochs: 5
+seed: 42
+save_path: ./checkpoint
