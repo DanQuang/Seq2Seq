@@ -35,10 +35,10 @@ class Seq2Seq(nn.Module):
         for t in range(1, target_len):
             output, hidden, cell = self.decoder(x, hidden, cell)
 
-            outputs[t] = output
+            outputs[:,t,:] = output
 
             best_guess = output.argmax(1)
 
-            x = target[t] if random.random() < teacher_force_ratio else best_guess
+            x = target[:, t] if random.random() < teacher_force_ratio else best_guess
         
         return outputs

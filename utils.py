@@ -25,10 +25,10 @@ def padding(array, max_length, padding_value):
         return array[:max_length]
     
 def collate_fn(batch):
-    batch_en_ids = [torch.tensor(data["en_ids"], dtype= torch.int) for data in batch]
-    batch_de_ids = [torch.tensor(data["de_ids"], dtype= torch.int) for data in batch]
+    batch_en_ids = [data["en_ids"] for data in batch]
+    batch_de_ids = [data["de_ids"] for data in batch]
 
     return {
-         "en_ids": batch_en_ids,
-         "de_ids": batch_de_ids
+         "en_ids": torch.tensor(batch_en_ids, dtype= torch.long),
+         "de_ids": torch.tensor(batch_de_ids, dtype= torch.long)
     }
