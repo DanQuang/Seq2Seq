@@ -98,7 +98,7 @@ class Test_Task:
 
                 concatenated_tokens = torch.cat(predict_tokens_list, dim=0).tolist()
 
-                list_sentence = [self.vocab_en.convert_ids_to_tokens(ids) for ids in concatenated_tokens]
+                list_sentence = [' '.join(self.vocab_en.convert_ids_to_tokens(ids)) for ids in concatenated_tokens]
 
                 # make csv file
                 df = pd.DataFrame({"predict": list_sentence})

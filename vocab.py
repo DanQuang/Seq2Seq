@@ -26,17 +26,10 @@ class Vocab:
                 else:
                     word_count[word] += 1
 
-        special_tokens = ['<unk>', '<pad>']
-        for w in special_tokens:
-            if w not in word_count:
-                word_count[w] = 1
-            else:
-                word_count[w] += 1
-
         sorted_word_count = dict(sorted(word_count.items(), key= lambda x: x[1], reverse= True))
 
-        self.word2idx = {'<sos>': 0, '<eos>': 1}
-        self.n_words = 2
+        self.word2idx = {'<sos>': 0, '<eos>': 1, '<unk>': 2, '<pad>': 3}
+        self.n_words = 4
 
         for word in sorted_word_count.keys():
             self.word2idx[word] = self.n_words
