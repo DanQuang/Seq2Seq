@@ -15,6 +15,7 @@ class Test_Task:
         self.save_path = config["save_path"]
         self.patience = config["patience"]
         self.dropout = config["dropout"]
+        self.batch_size = config["batch_size"]
         self.device = "cuda" if torch.cuda.is_available() else "cpu"
 
         # Load text embedding config
@@ -27,7 +28,7 @@ class Test_Task:
 
         # Load data
         self.data_path = config["data_path"]
-        self.dataloader = Load_Data(self.data_path, self.max_length)
+        self.dataloader = Load_Data(self.data_path, self.max_length, self.batch_size)
 
         # Load vocab
         self.vocab_en = self.dataloader.vocab_en

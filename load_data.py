@@ -42,8 +42,9 @@ class MyDataset(Dataset):
     
 
 class Load_Data:
-    def __init__(self, data_path, max_length):
+    def __init__(self, data_path, max_length, batch_size):
         self.dataset = datasets.load_dataset(data_path)
+        self.batch_size = batch_size
 
         list_train = list(self.dataset["train"])
         list_valid = list(self.dataset["validation"])
@@ -62,12 +63,12 @@ class Load_Data:
 
     def load_train_valid(self):
         train_dataloader = DataLoader(self.train_dataset,
-                                      batch_size= 32,
+                                      batch_size= self.batch_size,
                                       shuffle= True,
                                       collate_fn= collate_fn)
         
         valid_dataloader = DataLoader(self.valid_dataset,
-                                      batch_size= 32,
+                                      batch_size= self.batch_size,
                                       shuffle= False,
                                       collate_fn= collate_fn)
         
@@ -75,7 +76,7 @@ class Load_Data:
     
     def load_test(self):
         test_dataloader = DataLoader(self.test_dataset,
-                                     batch_size= 32,
+                                     batch_size= self.batch_size,
                                      shuffle= False,
                                      collate_fn= collate_fn)
         
