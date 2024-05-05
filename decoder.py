@@ -2,13 +2,13 @@ import torch
 from torch import nn 
 
 class Decoder(nn.Module):
-    def __init__(self, output_size, embedding_dim, hidden_dim, num_layers, dropout):
+    def __init__(self, output_size, embedding_dim, hidden_dim, num_layers, dropout, padding_idx):
         super(Decoder, self).__init__()
         self.hidden_dim = hidden_dim
         self.num_layers = num_layers
         # output_size = len vocab of target
         self.output_size = output_size
-        self.embedding = nn.Embedding(output_size, embedding_dim)
+        self.embedding = nn.Embedding(output_size, embedding_dim, padding_idx= padding_idx)
         self.rnn = nn.LSTM(embedding_dim, hidden_dim, num_layers, dropout= dropout, batch_first= True)
         self.dropout = nn.Dropout(dropout)
         self.fc = nn.Linear(hidden_dim, output_size)

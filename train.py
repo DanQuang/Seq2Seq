@@ -43,14 +43,16 @@ class Train_Task:
             embedding_dim= self.embedding_dim,
             hidden_dim= self.hidden_dim,
             num_layers= self.num_layers,
-            dropout= self.dropout
+            dropout= self.dropout,
+            padding_idx= self.vocab_de.pad_idx()
         )
         self.decoder = Decoder(
             output_size= en_vocab_size,
             embedding_dim= self.embedding_dim,
             hidden_dim= self.hidden_dim,
             num_layers= self.num_layers,
-            dropout= self.dropout
+            dropout= self.dropout,
+            padding_idx= self.vocab_en.pad_idx()
         )
 
         # Load model
@@ -87,9 +89,9 @@ class Train_Task:
 
         threshold = 0
 
+        self.model.train()
         for epoch in range(initial_epoch, initial_epoch + self.num_epochs):
             epoch_loss = 0
-            self.model.train()
             for _, item in enumerate(tqdm(train)):
                 source, target = item["de_ids"].to(self.device), item["en_ids"].to(self.device)
 
