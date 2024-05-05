@@ -56,7 +56,7 @@ class Train_Task:
         self.model = Seq2Seq(self.encoder, self.decoder, self.device).to(self.device)
 
         self.optim = optim.Adam(self.model.parameters(), lr= self.learning_rate)
-        self.criterion = nn.CrossEntropyLoss(ignore_index= self.vocab_de.pad_idx())
+        self.criterion = nn.CrossEntropyLoss(ignore_index= self.vocab_en.pad_idx())
 
     def train(self):
         train, dev = self.dataloader.load_train_valid()
@@ -86,9 +86,9 @@ class Train_Task:
 
         threshold = 0
 
-        self.model.train()
         for epoch in range(initial_epoch, initial_epoch + self.num_epochs):
             epoch_loss = 0
+            self.model.train()
             for _, item in enumerate(tqdm(train)):
                 source, target = item["de_ids"].to(self.device), item["en_ids"].to(self.device)
 
@@ -124,10 +124,10 @@ class Train_Task:
                     # outputs: [batch_size, target_len, target_vocab_size]
                     output_dim = output.shape[-1] # target_vocab_size
 
-                    output = output[:, 1:, :].view(-1, output_dim)
+                    output = output[:, 1:, :].contiguous().view(-1, output_dim)
                     # output: [batch_size*(target_len - 1), target_vocab_size]
 
-                    target = target[:, 1:].view(-1)
+                    target = target[:, 1:].contiguous().view(-1)
                     # target: [batch_size*(target_len - 1)]
 
                     loss = self.criterion(output, target)
@@ -154,7 +154,7 @@ class Train_Task:
                 else:
                     threshold = 0
 
-                if score <= best_score:
+                if score <= best_score or epoch == 0:
                     best_score = score
                     torch.save({
                         'epoch': epoch,

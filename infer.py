@@ -55,6 +55,7 @@ class Test_Task:
 
         # Load model
         self.model = Seq2Seq(self.encoder, self.decoder, self.device).to(self.device)
+        self.criterion = nn.CrossEntropyLoss(ignore_index= self.vocab_en.pad_idx())
 
     def predict(self):
         test = self.dataloader.load_test()
@@ -80,10 +81,10 @@ class Test_Task:
                     # output: [batch_size, target_len, target_vocab_size]
                     output_dim = output.shape[-1] # target_vocab_size
 
-                    output = output[:, 1:, :].view(-1, output_dim)
+                    output = output[:, 1:, :].contiguous().view(-1, output_dim)
                     # output: [batch_size*(target_len - 1), target_vocab_size]
 
-                    target = target[:, 1:].view(-1)
+                    target = target[:, 1:].contiguous().view(-1)
                     # target: [batch_size*(target_len - 1)]
 
                     loss = self.criterion(output, target)
