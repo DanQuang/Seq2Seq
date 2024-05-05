@@ -6,7 +6,7 @@ class Decoder(nn.Module):
         super(Decoder, self).__init__()
         self.hidden_dim = hidden_dim
         self.num_layers = num_layers
-        # output_size = len vocab of target (in this example is de)
+        # output_size = len vocab of target
         self.output_size = output_size
         self.embedding = nn.Embedding(output_size, embedding_dim)
         self.rnn = nn.LSTM(embedding_dim, hidden_dim, num_layers, dropout= dropout, batch_first= True)

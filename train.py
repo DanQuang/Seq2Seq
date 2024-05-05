@@ -38,14 +38,14 @@ class Train_Task:
 
         # Load Encoder, Decoder
         self.encoder = Encoder(
-            input_size= en_vocab_size,
+            input_size= de_vocab_size,
             embedding_dim= self.embedding_dim,
             hidden_dim= self.hidden_dim,
             num_layers= self.num_layers,
             dropout= self.dropout
         )
         self.decoder = Decoder(
-            output_size= de_vocab_size,
+            output_size= en_vocab_size,
             embedding_dim= self.embedding_dim,
             hidden_dim= self.hidden_dim,
             num_layers= self.num_layers,
@@ -90,7 +90,7 @@ class Train_Task:
         for epoch in range(initial_epoch, initial_epoch + self.num_epochs):
             epoch_loss = 0
             for _, item in enumerate(tqdm(train)):
-                source, target = item["en_ids"].to(self.device), item["de_ids"].to(self.device)
+                source, target = item["de_ids"].to(self.device), item["en_ids"].to(self.device)
 
                 self.optim.zero_grad()
 
@@ -119,7 +119,7 @@ class Train_Task:
             epoch_loss = 0
             with torch.inference_mode():
                 for _, item in enumerate(tqdm(dev)):
-                    source, target = item["en_ids"].to(self.device), item["de_ids"].to(self.device)
+                    source, target = item["de_ids"].to(self.device), item["en_ids"].to(self.device)
                     output = self.model(source, target, 0) # turn off teacher fourcing
                     # outputs: [batch_size, target_len, target_vocab_size]
                     output_dim = output.shape[-1] # target_vocab_size

@@ -51,7 +51,8 @@ class Vocab:
         return padding(ids, self.max_length, self.pad_idx())
     
     def convert_ids_to_tokens(self, ids: list):
-        return [self.idx2word[idx] for idx in ids]
+        tokens = [self.idx2word[idx] for idx in ids]
+        return [token for token in tokens if token != '<pad>']
     
     def vocab_size(self):
         return self.n_words

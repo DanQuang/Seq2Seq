@@ -6,8 +6,9 @@ from model import Seq2Seq
 from encoder import Encoder
 from decoder import Decoder
 from load_data import Load_Data
+import pandas as pd
 
-class Train_Task:
+class Test_Task:
     def __init__(self, config):
         self.num_epochs = config["num_epochs"]
         self.learning_rate = config["learning_rate"]
@@ -38,14 +39,14 @@ class Train_Task:
 
         # Load Encoder, Decoder
         self.encoder = Encoder(
-            input_size= en_vocab_size,
+            input_size= de_vocab_size,
             embedding_dim= self.embedding_dim,
             hidden_dim= self.hidden_dim,
             num_layers= self.num_layers,
             dropout= self.dropout
         )
         self.decoder = Decoder(
-            output_size= de_vocab_size,
+            output_size= en_vocab_size,
             embedding_dim= self.embedding_dim,
             hidden_dim= self.hidden_dim,
             num_layers= self.num_layers,
@@ -68,10 +69,15 @@ class Train_Task:
             self.model.eval()
             with torch.inference_mode():
                 epoch_loss = 0
+                predict_tokens_list = []
                 for _, item in enumerate(tqdm(test)):
-                    source, target = item["en_ids"].to(self.device), item["de_ids"].to(self.device)
+                    source, target = item["de_ids"].to(self.device), item["en_ids"].to(self.device)
                     output = self.model(source, target, 0) # turn off teacher fourcing
-                    # outputs: [batch_size, target_len, target_vocab_size]
+
+                    predict_token = output.argmax(-1)
+                    predict_tokens_list.append(predict_token)
+
+                    # output: [batch_size, target_len, target_vocab_size]
                     output_dim = output.shape[-1] # target_vocab_size
 
                     output = output[:, 1:, :].view(-1, output_dim)
@@ -87,3 +93,11 @@ class Train_Task:
                 test_loss = epoch_loss / len(test)
 
                 print(f"Test loss: {test_loss:.5f}")
+
+                concatenated_tokens = torch.cat(predict_tokens_list, dim=0).tolist()
+
+                list_sentence = [self.vocab_en.convert_ids_to_tokens(ids) for ids in concatenated_tokens]
+
+                # make csv file
+                df = pd.DataFrame({"predict": list_sentence})
+                df.to_csv("result.csv", index= False)

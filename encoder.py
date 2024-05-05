@@ -6,7 +6,7 @@ class Encoder(nn.Module):
         super(Encoder, self).__init__()
         self.hidden_dim = hidden_dim
         self.num_layers = num_layers
-        # input_size = len vocab of source (in this example is en)
+        # input_size = len vocab of source
         self.embedding = nn.Embedding(input_size, embedding_dim)
         self.rnn = nn.LSTM(embedding_dim, hidden_dim, num_layers, dropout= dropout, batch_first= True)
         self.dropout = nn.Dropout(dropout)
