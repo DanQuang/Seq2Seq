@@ -149,12 +149,12 @@ class Train_Task:
                 }, os.path.join(self.save_path, last_model))
 
                 # save the best model
-                if epoch > 0 and score < best_score:
+                if epoch > 0 and score > best_score:
                     threshold += 1
                 else:
                     threshold = 0
 
-                if score > best_score:
+                if score <= best_score:
                     best_score = score
                     torch.save({
                         'epoch': epoch,
