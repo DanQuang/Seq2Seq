@@ -44,14 +44,16 @@ class Test_Task:
             embedding_dim= self.embedding_dim,
             hidden_dim= self.hidden_dim,
             num_layers= self.num_layers,
-            dropout= self.dropout
+            dropout= self.dropout,
+            padding_idx= self.vocab_de.pad_idx()
         )
         self.decoder = Decoder(
             output_size= en_vocab_size,
             embedding_dim= self.embedding_dim,
             hidden_dim= self.hidden_dim,
             num_layers= self.num_layers,
-            dropout= self.dropout
+            dropout= self.dropout,
+            padding_idx= self.vocab_en.pad_idx()
         )
 
         # Load model
