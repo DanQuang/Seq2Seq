@@ -7,9 +7,9 @@ Use LSTM as encoder to map input sentence to vector and another LSTM to decode t
 ## Usage
 To train the Seq2Seq model, use the command line:
 
-``bash
+```bash
 python main.py --config config.yaml
-``
+```
 
 To test the Seq2Seq model, go to main.py and command these codes:
 
